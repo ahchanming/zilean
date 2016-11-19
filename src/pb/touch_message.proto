@@ -1,0 +1,7 @@
+
+message TouchMessage{
+	required string uid = 1;
+	required string dataVersion = 2;
+	required string timeStamp = 3;
+	required string appVersion = 4;
+}
