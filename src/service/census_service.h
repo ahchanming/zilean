@@ -14,6 +14,7 @@ private:
 	std::map<std::string, int> m_censusMap;
 public:
 	static CensusService& Instance();
+	
 
 };
 #endif
