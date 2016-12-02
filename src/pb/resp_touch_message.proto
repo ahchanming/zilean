@@ -1,0 +1,5 @@
+
+message RespTouchMessage{
+	required int32 code = 1;
+	optional string msg = 2;
+}

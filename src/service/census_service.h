@@ -20,7 +20,7 @@ public:
 	static CensusService& Instance();
 	std::string ToString();
 	void IncPV();
-	void IncUV();
+	void IncUV(std::string uid);
 	int GetPV();
 	int GetUV();
 	void ClearAll();
