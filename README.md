@@ -1,10 +1,16 @@
 # zilean
 
+#version 0.0.2
+- 简单的网络层，网络层负责socket通信与信息解析
+- dispatch层
+- 实现在线用户统计CensusService
+
+
 #version 0.0.1
 - censusService统计服务器
 - 客户端与服务器通信格式
-	- code + length + buff
-
+	- length + code  + buff
+	- 时间简单的通信，客户端发送一个TouchMessage,服务器返回一个RespTouchMessage
 
 # 开发日志
 提供提供一个简单的接口，客户端连接后，在日志上记录对应的信息。
