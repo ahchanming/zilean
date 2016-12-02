@@ -1,5 +1,4 @@
 #include "cstdio"
-//#include "lib/myserversocket.h"
 #include "lib/my_sockaddr.h"
 #include "lib/my_socket.h"
 #include "lib/my_server_socket.h"
@@ -13,35 +12,15 @@
 #include <pthread.h>
 
 
-void TestSocket(){
-	MySockAddr sockaddr;
-	sockaddr.Output();
-	MySocket mysocket(&sockaddr);
-	std::cout << mysocket.ToString() << std::endl;	
-	MyServerSocket myserversocket(8099);
-	myserversocket.Init();
-	//MyServerSocket serversocekt;
-	printf("Hello World");
-}
-
-
-void *dowork(void *arg){
-	printf("this is a new thread\n");
-	CensusService &cs = CensusService::Instance();
-	cs.IncPV();
-	printf("pv is %d\n", cs.GetPV());
-}
 
 void recieveMessage(char* message){
 	int length;
 	int byte;
 	char* buff;
 	ZileanUtil::ParseFromMessage(message, length, byte, buff);
-	printf("length is %d\n", length);
-	puts(buff);
 	TouchMessage tm;
 	tm.ParseFromArray(buff, length);
-	puts("this is parse from");
+	puts("Recieve From Client");
 	std::cout << tm.uid() << std::endl;
 	std::cout << tm.dataversion() << std::endl;
 	std::cout << tm.timestamp() << std::endl;
@@ -62,25 +41,9 @@ void sendMessage(MySocket *ms){
 	int length = rtm.ByteSize();
 	char* byte = (char*)malloc(sizeof(char) * length);
 	rtm.SerializeToArray(byte, length);
-	puts("The Resp byte is");
-	for (int i = 0; i < length; ++i){
-		putchar(byte[i]);
-	}
-	puts("");
-	outputRTM(byte, length);
 	char* message = ZileanUtil::Format2Message(length, 1, byte);
-	puts("Send To Client");
-	for (int i = 0; i < length + 16; ++i){
-		putchar(message[i]);
-	}
-	puts("");
-	printf("Send To Client, Length is %d\n", length + 16);
+	puts("Ready Send To Client");
 	ms->Send(message, length + 16);
-	int ll;
-	int tt;
-	char* bu;
-	ZileanUtil::ParseFromMessage(message, ll, tt, bu);
-	outputRTM(bu, ll);
 }
 
 void work(){
@@ -94,47 +57,10 @@ void work(){
 		int recvRet;
 		recvRet = ms->Recv(buff, 4096);
 		printf("recieve from client, error is %d\n", errno);
-		printf("recieve from client, length is [%d], data is [%s]", recvRet, buff);
 		recieveMessage(buff);
 		sendMessage(ms);
 		ms->Close();
-		//ms->Send("Hello World", 12);
-		//pthread_t tid;
-		//pthread_create(&tid, NULL, dowork, NULL);
-		//ms->Close();
 	}
-}
-
-void testPBPar(char* message){
-	int length;
-	int byte;
-	char* buff;
-	ZileanUtil::ParseFromMessage(message, length, byte, buff);
-	printf("length is %d\n", length);
-	puts(buff);
-	TouchMessage tm;
-	tm.ParseFromArray(buff, length);
-	puts("this is parse from");
-	std::cout << tm.uid() << std::endl;
-}
-
-
-void testPBMessage(){
-	TouchMessage tm;
-	tm.set_uid("opq");
-	tm.set_dataversion("0001");
-	tm.set_timestamp("2016-12-01");
-	tm.set_appversion("android_0.0.1");
-	int length = tm.ByteSize();
-	char* buff = (char*)malloc(sizeof(char) * length);
-	tm.SerializeToArray(buff, length);
-	char* message = ZileanUtil::Format2Message(length, 1, buff);
-	puts("This is the message:\n");
-	for (int i = 0; i < length + 16; ++i){
-		putchar(message[i]);
-	}
-	puts("");
-	testPBPar(message);
 }
 
 
@@ -145,10 +71,8 @@ int main(){
 	if (pid < 0){
 		printf("Fork Error, Error Number is %d\n", errno);
 	}else if (pid == 0){
-		testPBMessage();
-		printf("Parent process\n");
 	}else{
-		printf("Sub process\n");
+		puts("Sub Process Start!");
 		work();
 	}
 }

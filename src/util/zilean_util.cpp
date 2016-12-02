@@ -12,11 +12,6 @@ int writeNumberOnChar(int number, char* str, int dignum){
 		*(str + tmq) = (char)('0' + tmp % 10);
 		tmp /= 10;
 	}
-	puts("this is write number");
-	for (int i = 0; i < dignum; ++i){
-		putchar(*(str + i));
-	}
-	puts("");
 	return tmp > 0 ? -1 : 0;
 }
 
@@ -45,7 +40,5 @@ int ZileanUtil::ParseFromMessage(char* message, int &length, int &type, char* &b
 	type = readNumberOnChar(message + BODY_LENGTH, TYPE_LENGTH);
 	byte = (char*)malloc(sizeof(char) * length);
 	strncpy(byte, message + HEADER_LENGTH, length);
-	puts("zileanUtil");
-	puts(byte);
 	return 0;
 }
