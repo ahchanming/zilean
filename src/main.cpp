@@ -5,13 +5,13 @@
 #include "service/census_service.h"
 #include "pb/touch_message.pb.h"
 #include "pb/resp_touch_message.pb.h"
+#include "service/touch_service.h"
 #include "util/zilean_util.h"
 #include <iostream>
 #include <unistd.h>
 #include <errno.h>
 #include <pthread.h>
-
-
+#include "google/protobuf/message.h"
 
 void recieveMessage(char* message){
 	int length;
@@ -64,6 +64,16 @@ void work(){
 }
 
 
+void test(){
+	TouchService touchService;
+	::google::protobuf::Message* message = touchService.Touch(NULL);
+	std::cout << message->ByteSize() << std::endl;
+	char* byte = (char*)malloc(sizeof(char) * (message->ByteSize()));
+	memset(byte, 0, sizeof(byte));
+	message->SerializeToArray(byte, message->ByteSize());
+	std::cout << byte << std::endl;
+}
+
 int main(){
 	puts("Zilean backend start up!");
 	int pid;
@@ -71,6 +81,7 @@ int main(){
 	if (pid < 0){
 		printf("Fork Error, Error Number is %d\n", errno);
 	}else if (pid == 0){
+		test();
 	}else{
 		puts("Sub Process Start!");
 		work();

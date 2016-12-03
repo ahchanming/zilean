@@ -10,7 +10,9 @@ LIB=bin/my_sockaddr.o \
 PB=bin/touch_message.o \
    bin/resp_touch_message.o 
 
-SERVICE=bin/census_service.o
+SERVICE=bin/census_service.o\
+		bin/dispatch_service.o\
+		bin/touch_service.o
 
 UTIL=bin/zilean_util.o
 
@@ -34,6 +36,10 @@ bin/my_server_socket.o: lib/my_server_socket.h lib/my_server_socket.cpp bin/my_s
 ###service	
 bin/census_service.o: service/census_service.h service/census_service.cpp
 	g++ -c service/census_service.cpp -o bin/census_service.o ${INCLUDE}
+bin/dispatch_service.o: service/dispatch_service.h service/dispatch_service.cpp
+	g++ -c service/dispatch_service.cpp -o bin/dispatch_service.o ${INCLUDE}
+bin/touch_service.o: service/touch_service.h service/touch_service.cpp
+	g++ -c service/touch_service.cpp -o bin/touch_service.o ${PB_INCLUDE}
 
 
 ###pb
