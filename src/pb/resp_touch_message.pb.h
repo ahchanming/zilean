@@ -108,20 +108,30 @@ class RespTouchMessage : public ::google::protobuf::Message {
   inline ::std::string* release_msg();
   inline void set_allocated_msg(::std::string* msg);
 
+  // optional int32 uv = 3;
+  inline bool has_uv() const;
+  inline void clear_uv();
+  static const int kUvFieldNumber = 3;
+  inline ::google::protobuf::int32 uv() const;
+  inline void set_uv(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:RespTouchMessage)
  private:
   inline void set_has_code();
   inline void clear_has_code();
   inline void set_has_msg();
   inline void clear_has_msg();
+  inline void set_has_uv();
+  inline void clear_has_uv();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::std::string* msg_;
   ::google::protobuf::int32 code_;
+  ::google::protobuf::int32 uv_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
 
   friend void  protobuf_AddDesc_resp_5ftouch_5fmessage_2eproto();
   friend void protobuf_AssignDesc_resp_5ftouch_5fmessage_2eproto();
@@ -227,6 +237,28 @@ inline void RespTouchMessage::set_allocated_msg(::std::string* msg) {
     clear_has_msg();
     msg_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   }
+}
+
+// optional int32 uv = 3;
+inline bool RespTouchMessage::has_uv() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void RespTouchMessage::set_has_uv() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void RespTouchMessage::clear_has_uv() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void RespTouchMessage::clear_uv() {
+  uv_ = 0;
+  clear_has_uv();
+}
+inline ::google::protobuf::int32 RespTouchMessage::uv() const {
+  return uv_;
+}
+inline void RespTouchMessage::set_uv(::google::protobuf::int32 value) {
+  set_has_uv();
+  uv_ = value;
 }
 
 

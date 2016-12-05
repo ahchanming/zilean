@@ -2,4 +2,5 @@
 message RespTouchMessage{
 	required int32 code = 1;
 	optional string msg = 2;
+	optional int32 uv = 3;
 }

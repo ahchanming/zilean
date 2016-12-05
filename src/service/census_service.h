@@ -14,7 +14,7 @@ private:
 	CensusService& operator=(const CensusService& tmp);
 	int m_uv;
 	int m_pv;
-	std::map<std::string, int> m_censusMap;
+	std::map<std::string, int> m_userMap;
 	pthread_t m_tid;
 public:
 	static CensusService& Instance();

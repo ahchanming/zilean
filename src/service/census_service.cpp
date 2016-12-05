@@ -5,21 +5,21 @@
 
 
 void *clearTask(void* arg){
+	std::cout << "begin clear task" << std::endl;
 	while (true){
 		printf("This is a clear Task\n");
-		sleep(1);
+		sleep(10);
 	}
 }
 
 CensusService::CensusService(){
-	std::cout << ToString() << "!!!" << std::endl;	
-	std::cout << m_uv << std::endl;
-	std::cout << &m_tid << std::endl;
+	std::cout << "Init Haha" << std::endl;
 	int ret;
 	if (ret = pthread_create(&m_tid, NULL, clearTask, NULL) < 0){
 		std::cout << ret << " " << errno << std::endl;
 	}
-	std::cout << "ret is " << ret << std::endl;
+	std::cout << "Ret is " << ret << " " << errno << " tid is " << m_tid << std::endl;
+	m_pv = m_uv = 0;
 }
 
 CensusService& CensusService::Instance(){
@@ -39,7 +39,12 @@ void CensusService::IncPV(){
 }
 
 void CensusService::IncUV(std::string str){
-	m_uv++;
+	if (m_userMap[str] > 0){
+		
+	}else{
+		m_userMap[str] = 1;
+		m_uv++;
+	}
 }
 
 int CensusService::GetPV(){

@@ -6,7 +6,11 @@
 
 class TouchService{
 private:
+	TouchService();
+	TouchService(TouchService&);
+	TouchService& operator=(const TouchService& tmp);
 public:
 	::google::protobuf::Message* Touch(TouchMessage* tm);
+	static TouchService& Instance();
 };
 #endif

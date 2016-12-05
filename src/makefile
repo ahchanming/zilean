@@ -18,11 +18,12 @@ UTIL=bin/zilean_util.o
 
 
 #main: bin/resp_touch_message.o bin/zilean_util.o bin/touch_message.o bin/main.o bin/my_sockaddr.o bin/my_socket.o bin/my_server_socket.o bin/census_service.o
+
 main: ${UTIL} ${PB} ${LIB} ${SERVICE} bin/main.o
 	g++ ${UTIL} ${PB} ${LIB} ${SERVICE} bin/main.o -o main ${PB_INCLUDE} -pthread
 
 bin/main.o: main.cpp
-	g++ -c main.cpp -o bin/main.o ${PB_INCLUDE}
+	g++ -c main.cpp -o bin/main.o ${PB_INCLUDE} -pthread
 
 ###lib
 bin/my_sockaddr.o: lib/my_sockaddr.h lib/my_sockaddr.cpp
@@ -35,11 +36,11 @@ bin/my_server_socket.o: lib/my_server_socket.h lib/my_server_socket.cpp bin/my_s
 	
 ###service	
 bin/census_service.o: service/census_service.h service/census_service.cpp
-	g++ -c service/census_service.cpp -o bin/census_service.o ${INCLUDE}
+	g++ -c service/census_service.cpp -o bin/census_service.o ${INCLUDE} -pthread
 bin/dispatch_service.o: service/dispatch_service.h service/dispatch_service.cpp
-	g++ -c service/dispatch_service.cpp -o bin/dispatch_service.o ${INCLUDE}
-bin/touch_service.o: service/touch_service.h service/touch_service.cpp
-	g++ -c service/touch_service.cpp -o bin/touch_service.o ${PB_INCLUDE}
+	g++ -c service/dispatch_service.cpp -o bin/dispatch_service.o ${INCLUDE} 
+bin/touch_service.o: service/touch_service.h service/touch_service.cpp bin/census_service.o
+	g++ -c service/touch_service.cpp bin/census_service.o -o bin/touch_service.o ${PB_INCLUDE} -pthread
 
 
 ###pb

@@ -32,9 +32,10 @@ void protobuf_AssignDesc_resp_5ftouch_5fmessage_2eproto() {
       "resp_touch_message.proto");
   GOOGLE_CHECK(file != NULL);
   RespTouchMessage_descriptor_ = file->message_type(0);
-  static const int RespTouchMessage_offsets_[2] = {
+  static const int RespTouchMessage_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RespTouchMessage, code_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RespTouchMessage, msg_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RespTouchMessage, uv_),
   };
   RespTouchMessage_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -77,8 +78,9 @@ void protobuf_AddDesc_resp_5ftouch_5fmessage_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\030resp_touch_message.proto\"-\n\020RespTouchM"
-    "essage\022\014\n\004code\030\001 \002(\005\022\013\n\003msg\030\002 \001(\t", 73);
+    "\n\030resp_touch_message.proto\"9\n\020RespTouchM"
+    "essage\022\014\n\004code\030\001 \002(\005\022\013\n\003msg\030\002 \001(\t\022\n\n\002uv\030"
+    "\003 \001(\005", 85);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "resp_touch_message.proto", &protobuf_RegisterTypes);
   RespTouchMessage::default_instance_ = new RespTouchMessage();
@@ -98,6 +100,7 @@ struct StaticDescriptorInitializer_resp_5ftouch_5fmessage_2eproto {
 #ifndef _MSC_VER
 const int RespTouchMessage::kCodeFieldNumber;
 const int RespTouchMessage::kMsgFieldNumber;
+const int RespTouchMessage::kUvFieldNumber;
 #endif  // !_MSC_VER
 
 RespTouchMessage::RespTouchMessage()
@@ -118,6 +121,7 @@ void RespTouchMessage::SharedCtor() {
   _cached_size_ = 0;
   code_ = 0;
   msg_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  uv_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -162,6 +166,7 @@ void RespTouchMessage::Clear() {
         msg_->clear();
       }
     }
+    uv_ = 0;
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -201,6 +206,22 @@ bool RespTouchMessage::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(24)) goto parse_uv;
+        break;
+      }
+
+      // optional int32 uv = 3;
+      case 3: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_uv:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &uv_)));
+          set_has_uv();
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -237,6 +258,11 @@ void RespTouchMessage::SerializeWithCachedSizes(
       2, this->msg(), output);
   }
 
+  // optional int32 uv = 3;
+  if (has_uv()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->uv(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -258,6 +284,11 @@ void RespTouchMessage::SerializeWithCachedSizes(
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         2, this->msg(), target);
+  }
+
+  // optional int32 uv = 3;
+  if (has_uv()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->uv(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -283,6 +314,13 @@ int RespTouchMessage::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->msg());
+    }
+
+    // optional int32 uv = 3;
+    if (has_uv()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->uv());
     }
 
   }
@@ -318,6 +356,9 @@ void RespTouchMessage::MergeFrom(const RespTouchMessage& from) {
     if (from.has_msg()) {
       set_msg(from.msg());
     }
+    if (from.has_uv()) {
+      set_uv(from.uv());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -344,6 +385,7 @@ void RespTouchMessage::Swap(RespTouchMessage* other) {
   if (other != this) {
     std::swap(code_, other->code_);
     std::swap(msg_, other->msg_);
+    std::swap(uv_, other->uv_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

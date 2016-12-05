@@ -65,13 +65,21 @@ void work(){
 
 
 void test(){
-	TouchService touchService;
-	::google::protobuf::Message* message = touchService.Touch(NULL);
+	std::cout << "main Test" << std::endl;
+	TouchService& touchService = TouchService::Instance();
+	std::cout << "get touchService" << std::endl;
+	TouchMessage tm;
+	tm.set_uid("opq.chen");
+	::google::protobuf::Message* message = touchService.Touch(&tm);
 	std::cout << message->ByteSize() << std::endl;
 	char* byte = (char*)malloc(sizeof(char) * (message->ByteSize()));
 	memset(byte, 0, sizeof(byte));
 	message->SerializeToArray(byte, message->ByteSize());
-	std::cout << byte << std::endl;
+	RespTouchMessage rtm;
+	rtm.ParseFromArray(byte, message->ByteSize());
+	std::cout << "code :" << rtm.code() << std::endl;
+	std::cout << "msg :" << rtm.msg() << std::endl;
+	std::cout << "uv :" << rtm.uv() << std::endl;
 }
 
 int main(){
