@@ -12,6 +12,7 @@
 #include <errno.h>
 #include <pthread.h>
 #include "google/protobuf/message.h"
+#include "service/dispatch_service.h"
 
 void recieveMessage(char* message){
 	int length;
@@ -46,6 +47,15 @@ void sendMessage(MySocket *ms){
 	ms->Send(message, length + 16);
 }
 
+void sendMessage(MySocket *ms, ::google::protobuf::Message* message){
+	int length = message->ByteSize();
+	char* byte = (char*)malloc(sizeof(char) * length);
+	message->SerializeToArray(byte, length);
+	char* writeMessage = ZileanUtil::Format2Message(length, 2000, byte);
+	puts("Main::SendMessage");
+	ms->Send(writeMessage, length + 16);
+}
+
 void work(){
 	MyServerSocket mss(9292);
 	mss.Init();
@@ -57,8 +67,10 @@ void work(){
 		int recvRet;
 		recvRet = ms->Recv(buff, 4096);
 		printf("recieve from client, error is %d\n", errno);
-		recieveMessage(buff);
-		sendMessage(ms);
+		DispatchService ds;
+		::google::protobuf::Message* message = ds.Dispatch(recvRet, buff);
+		//recieveMessage(buff);
+		sendMessage(ms, message);
 		ms->Close();
 	}
 }
@@ -89,7 +101,7 @@ int main(){
 	if (pid < 0){
 		printf("Fork Error, Error Number is %d\n", errno);
 	}else if (pid == 0){
-		test();
+		//test();
 	}else{
 		puts("Sub Process Start!");
 		work();

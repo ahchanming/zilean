@@ -18,6 +18,9 @@ int writeNumberOnChar(int number, char* str, int dignum){
 int readNumberOnChar(char* str, int dignum){
 	int ret = 0;
 	for (int i = 0; i < dignum; ++i){
+		if (str[i] < '0' || str[i] > '9'){
+			return -1;
+		}
 		ret = ret * 10 + str[i] - '0';
 	}
 	return ret;
@@ -36,9 +39,15 @@ char* ZileanUtil::Format2Message(int length, int type, char* byte){
 }
 
 int ZileanUtil::ParseFromMessage(char* message, int &length, int &type, char* &byte){
-	length = readNumberOnChar(message, BODY_LENGTH);
-	type = readNumberOnChar(message + BODY_LENGTH, TYPE_LENGTH);
+	if ((length = readNumberOnChar(message, BODY_LENGTH)) < 0){
+		printf("ZileanUtil::readNumberOnChar ReadLength Error\n");
+		return -1;
+	}
+	if ((type = readNumberOnChar(message + BODY_LENGTH, TYPE_LENGTH)) < 0){
+		printf("ZileanUtil::readNumberOnChar readType Error\n");
+		return -1;
+	}
 	byte = (char*)malloc(sizeof(char) * length);
-	strncpy(byte, message + HEADER_LENGTH, length);
+	memcpy(byte, message + HEADER_LENGTH, length);
 	return 0;
 }

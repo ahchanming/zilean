@@ -11,7 +11,6 @@ PB=bin/touch_message.o \
    bin/resp_touch_message.o 
 
 SERVICE=bin/census_service.o\
-		bin/dispatch_service.o\
 		bin/touch_service.o
 
 UTIL=bin/zilean_util.o
@@ -19,8 +18,9 @@ UTIL=bin/zilean_util.o
 
 #main: bin/resp_touch_message.o bin/zilean_util.o bin/touch_message.o bin/main.o bin/my_sockaddr.o bin/my_socket.o bin/my_server_socket.o bin/census_service.o
 
-main: ${UTIL} ${PB} ${LIB} ${SERVICE} bin/main.o
-	g++ ${UTIL} ${PB} ${LIB} ${SERVICE} bin/main.o -o main ${PB_INCLUDE} -pthread
+main: ${UTIL} ${PB} ${LIB} ${SERVICE} bin/main.o bin/dispatch_service.o
+	@echo "make main"
+	g++ ${UTIL} ${PB} ${LIB} ${SERVICE} bin/main.o bin/dispatch_service.o -o main ${PB_INCLUDE} -pthread
 
 bin/main.o: main.cpp
 	g++ -c main.cpp -o bin/main.o ${PB_INCLUDE} -pthread
@@ -37,8 +37,6 @@ bin/my_server_socket.o: lib/my_server_socket.h lib/my_server_socket.cpp bin/my_s
 ###service	
 bin/census_service.o: service/census_service.h service/census_service.cpp
 	g++ -c service/census_service.cpp -o bin/census_service.o ${INCLUDE} -pthread
-bin/dispatch_service.o: service/dispatch_service.h service/dispatch_service.cpp
-	g++ -c service/dispatch_service.cpp -o bin/dispatch_service.o ${INCLUDE} 
 bin/touch_service.o: service/touch_service.h service/touch_service.cpp bin/census_service.o
 	g++ -c service/touch_service.cpp bin/census_service.o -o bin/touch_service.o ${PB_INCLUDE} -pthread
 
@@ -53,6 +51,10 @@ all: testCensusService
 ###util
 bin/zilean_util.o: util/zilean_util.h util/zilean_util.cpp
 	g++ -c util/zilean_util.cpp -o bin/zilean_util.o
+
+###dispatch
+bin/dispatch_service.o: service/dispatch_service.h service/dispatch_service.cpp ${SERVICE} bin/zilean_util.o ${PB}
+	g++ -c service/dispatch_service.cpp ${SERVICE} bin/zilean_util.o -o bin/dispatch_service.o ${PB_INCLUDE} -pthread
 
 testCensusService: census_service.o test_census_service.o
 	g++ census_service.o test_census_service.o -o testCS -pthread
