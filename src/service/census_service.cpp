@@ -39,6 +39,8 @@ void CensusService::IncPV(){
 }
 
 void CensusService::IncUV(std::string str){
+	std::cout << "The uid is " <<  str << std::endl;
+	std::cout << "Map size is " << m_userMap.size() << std::endl;
 	if (m_userMap[str] > 0){
 		
 	}else{

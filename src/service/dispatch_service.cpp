@@ -32,6 +32,7 @@ int parseFromArray(::google::protobuf::Message *message, int length, char* byte)
 		case 1000:
 			printf("TouchMessage\n");
 			TouchMessage* tm = new TouchMessage();
+			tm->ParseFromArray(byte, length);
 			TouchService& ts = TouchService::Instance();
 			return ts.Touch(tm);
 			break;
@@ -41,5 +42,12 @@ int parseFromArray(::google::protobuf::Message *message, int length, char* byte)
 }
 
 
+DispatchService::DispatchService(){
 
+}
+
+DispatchService& DispatchService::Instance(){
+	static DispatchService m_dispatchService;
+	return m_dispatchService;
+}
 

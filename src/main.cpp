@@ -56,23 +56,38 @@ void sendMessage(MySocket *ms, ::google::protobuf::Message* message){
 	ms->Send(writeMessage, length + 16);
 }
 
+void *execute(void *args);
+
 void work(){
 	MyServerSocket mss(9292);
 	mss.Init();
 	char buff[4096];
 	while (true){
 		MySocket *ms = mss.Accept();
-		puts("A socket Accept");
+		pthread_t tid;
+		int ret;
+		if ((ret = pthread_create(&tid, NULL, execute, (void*)ms)) < 0){
+			puts("pthread_create Error");
+		}
+	}
+}
+
+void *execute(void *args){
+	puts("thread create");
+	char buff[4096];
+	MySocket* ms = (MySocket*)args;
+	while (true){
 		memset(buff, 0, sizeof(buff));
 		int recvRet;
-		recvRet = ms->Recv(buff, 4096);
-		printf("recieve from client, error is %d\n", errno);
-		DispatchService ds;
+		if ((recvRet = ms->Recv(buff, 4096)) < 0){
+			printf("recieve from client, error code is %d\n", errno);
+			break;
+		}
+		DispatchService ds = DispatchService::Instance();
 		::google::protobuf::Message* message = ds.Dispatch(recvRet, buff);
-		//recieveMessage(buff);
 		sendMessage(ms, message);
-		ms->Close();
 	}
+	delete ms;
 }
 
 

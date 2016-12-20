@@ -10,8 +10,10 @@
 class DispatchService{
 private:
 	::google::protobuf::Message* innerDispatch(int length, int type, char* byte);
+	DispatchService();
 public:
 	::google::protobuf::Message* Dispatch(int length, char* byte);
+	static DispatchService& Instance();
 };
 
 #endif 
