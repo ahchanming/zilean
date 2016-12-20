@@ -3,8 +3,8 @@
 #version 0.0.3
 - configure server 配置的读取
 	- getValue getIntValue
-- threadPool 线程池模块
-	- 基础线程池
+- 写数据模块
+	- 读写数据
 
 #version 0.0.2
 - 简单的网络层，网络层负责socket通信与信息解析
