@@ -79,6 +79,7 @@
     var status;
     var workMin = 25;
     var sleepMin = 5;
+    var workContent = "";
 
     $(document).ready(function () {
         $("#startBtn").click(function () {
@@ -87,13 +88,16 @@
         })
 
         function start() {
+            removeCountDown();
             if (!isStart){
                 if (status == 0){
+                    workContent=prompt("输入任务名称", workContent);
                     countDown = 60 * workMin;
                 }else{
                     countDown = 60 * sleepMin;
                 }
                 isStart = true;
+                $("#startBtn").attr('disabled',true);
                 countDownFunc();
             }
         }
@@ -126,14 +130,16 @@
             if (countDown == 0){
                 isStart = false;
                 //切换休息工作状态
-                countDown = 1 - countDown;
-                if (countDown == 1){
+                status = 1 - status;
+                if (status == 1){
                     $("#showTime").css("color","red");
+                    $('#outputList').append("<p>" + workContent + "消耗了一个番茄</p>");
                 }else{
                     $("#showTime").css("color","green");
+                    $('#outputList').append("<p>休息完毕</p>");
                 }
-                $('#outputList').append("<p>完成1次番茄时间</p>");
                 $("#bgMusic").get(0).play();
+                $("#startBtn").attr('disabled',false);
             }
             t = setTimeout('countDownFunc()',  1000);
         }
