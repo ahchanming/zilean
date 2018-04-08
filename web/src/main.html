@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+</head>
+<body>
+
+
+<div class="container">
+    <h2>选项卡切换</h2>
+    <br>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#home">番茄时间</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#menu1">计划</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#menu2">Menu 2</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div id="home" class="container tab-pane active"><br>
+            <div  id = "showTime" class="display-4 text-center" style="color : green">
+                <span id = "min">25</span>
+                <span> :</span>
+                <span id = "second">00</span>
+            </div>
+            <div class="text-center">
+                <button id = "startBtn" type="button" class="btn btn-success">start</button>
+                <button id = "stopBtn" type="button" class="btn btn-danger">stop</button>
+            </div>
+            <div class="text-center" id = "outputList">
+
+            </div>
+        </div>
+        <div id="menu1" class="container tab-pane fade"><br>
+            <h3>Menu 1</h3>
+            <a href="#" data-toggle="popover" title="弹出框标题" data-content="弹出框内容">多次点我</a>
+
+            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        </div>
+        <div id="menu2" class="container tab-pane fade"><br>
+            <h3>Menu 2</h3>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+        </div>
+    </div>
+</div>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="http://libs.baidu.com/jquery/1.7.0/jquery.min.js"></script>
+</body>
+
+
+<script>
+    var countDown;
+    var isStart = false;
+    var t;
+    // 0 - working 1 - sleep
+    var status;
+    var workMin = 1;
+    var sleepMin = 1;
+
+    $(document).ready(function () {
+        $("#startBtn").click(function () {
+            //alert("startBtn onclick");
+            start();
+        })
+
+        function start() {
+            if (!isStart){
+                if (status == 0){
+                    countDown = 60 * workMin;
+                }else{
+                    countDown = 60 * sleepMin;
+                }
+                isStart = true;
+                countDownFunc();
+            }
+        }
+
+        $('#stopBtn').click(function () {
+            isStart = false;
+            removeCountDown();
+        })
+
+    })
+
+    function setTime() {
+        second = countDown % 60;
+        if (second < 10){
+            second = "0" + second;
+        }
+        minute = Math.floor(countDown / 60);
+        if (minute < 10){
+            minute = "0" + minute;
+        }
+        $("#min").text(minute);
+        $("#second").text(second);
+    }
+
+    function countDownFunc(){
+        if (isStart){
+            countDown = countDown - 1;
+            console.error(countDown);
+            setTime();
+            if (countDown == 0){
+                isStart = false;
+                //切换休息工作状态
+                countDown = 1 - countDown;
+                if (countDown == 1){
+                    $("#showTime").css("color","red");
+                }else{
+                    $("#showTime").css("color","green");
+                }
+                $('#outputList').append("<p>完成1次番茄时间</p>");
+                $('#outputList').append("<embed src=\"http://data.huiyi8.com/2017/gha/03/17/1702.mp3\" hidden=\"true\" autostart=\"true\" loop=\"true\">");
+                alert("结束");
+            }
+            t = setTimeout('countDownFunc()',  1000);
+        }
+    }
+
+    function removeCountDown(){
+        clearTimeout(t);
+    }
+</script>
+</html>
