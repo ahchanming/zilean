@@ -41,6 +41,9 @@
                 <button id = "startBtn" type="button" class="btn btn-success">start</button>
                 <button id = "stopBtn" type="button" class="btn btn-danger">stop</button>
             </div>
+            <audio id="bgMusic" >
+                <source src="http://data.huiyi8.com/2017/gha/03/17/1702.mp3" type="audio/mp3">
+            </audio>
             <div class="text-center" id = "outputList">
 
             </div>
@@ -74,8 +77,8 @@
     var t;
     // 0 - working 1 - sleep
     var status;
-    var workMin = 1;
-    var sleepMin = 1;
+    var workMin = 25;
+    var sleepMin = 5;
 
     $(document).ready(function () {
         $("#startBtn").click(function () {
@@ -118,7 +121,7 @@
     function countDownFunc(){
         if (isStart){
             countDown = countDown - 1;
-            console.error(countDown);
+            //console.error(countDown);
             setTime();
             if (countDown == 0){
                 isStart = false;
@@ -130,8 +133,7 @@
                     $("#showTime").css("color","green");
                 }
                 $('#outputList').append("<p>完成1次番茄时间</p>");
-                $('#outputList').append("<embed src=\"http://data.huiyi8.com/2017/gha/03/17/1702.mp3\" hidden=\"true\" autostart=\"true\" loop=\"true\">");
-                alert("结束");
+                $("#bgMusic").get(0).play();
             }
             t = setTimeout('countDownFunc()',  1000);
         }
