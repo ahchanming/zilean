@@ -1,4 +1,7 @@
 # zilean
+#version 0.0.4
+- 增加web模块
+    - 增加浮层设置时间
 
 #version 0.0.3
 - configure server 配置的读取
