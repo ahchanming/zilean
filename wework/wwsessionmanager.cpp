@@ -11,12 +11,13 @@ using namespace rapidjson;
 int SessionManager::GetSession(string &session)
 {
 	char* url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=ww285b41c580a23153&corpsecret=i1-4i10hmmYUMGUXGC3_OrdsKruhf5llFm6piCFg2RA";            
-	char* resstr;
-	getUrl(url, resstr);
+	string result;
+	string errmsg;
+	doGet(url, result, errmsg);
 
 	Document document;
 	//printf("%s\n", resstr);
-	if (document.Parse(resstr).HasParseError())
+	if (document.Parse(result.c_str()).HasParseError())
 	{
 		printf("parse session error\n");
 		return -1;
@@ -31,8 +32,22 @@ int SessionManager::GetSession(string &session)
 	}
 }
 
-int SessionManager::SendMsg(int agentId, std::string content, std::string session)
+int SessionManager::SendMsg(int agentId, std::string content)
 {
+	string url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=";
+	string token;
+	int ret = GetSession(token);
+	if (ret != 0)
+	{
+		printf("Get Session Error ret is %d\n", ret);
+	}
+	string postUrl = url + token;
+	char postData[4096];
+	sprintf(postData, "{\"touser\" : \"@all\",\"msgtype\" : \"text\",\"agentid\" : %d,\"text\" : {\"content\" : \"%s\"},\"safe\":0}", agentId, content.c_str());
+	printf("postData[%s]", postData);
+	string result;
+	string error;
+	ret = doPost(postUrl.c_str(), postData, result, error);
 	return 0;
 }
 

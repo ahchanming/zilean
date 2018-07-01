@@ -11,7 +11,10 @@ bin/membermanager.o: membermanager.h member.h
 
 bin/wwsessionmanager.o: wwsessionmanager.h httpclient.h wwsessionmanager.cpp
 	g++ -c  wwsessionmanager.cpp -o bin/wwsessionmanager.o -lculr -I/home/opq/workspace/rapidjson/include
-	
+
+
+bin/contest: contest.cpp wwsessionmanager.h httpclient.h bin/wwsessionmanager.o
+	g++ contest.cpp bin/wwsessionmanager.o -lcurl -I/home/opq/workspace/rapidjson/include -o bin/contest
 
 #test
 testmemberdao: memberdao.h member.h
@@ -20,5 +23,6 @@ testmemberdao: memberdao.h member.h
 testsessionmanager: test/testsessionmanager.cpp bin/wwsessionmanager.o
 	g++ -std=c++11 bin/wwsessionmanager.o test/testsessionmanager.cpp -o test/testsessionmanager -I/home/opq/workspace/zilean/wework -lcurl 
 
-	
+testsendmsg: test/testsendmsg.cpp bin/wwsessionmanager.o
+	g++ -std=c++11 bin/wwsessionmanager.o test/testsendmsg.cpp -o test/testsendmsg -I/home/opq/workspace/zilean/wework -lcurl
 
